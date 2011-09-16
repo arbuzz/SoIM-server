@@ -1,6 +1,7 @@
 package model;
 
 import org.apache.mina.core.session.IoSession;
+import org.msgpack.annotation.MessagePackMessage;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 
@@ -9,6 +10,7 @@ import org.simpleframework.xml.Element;
  *
  * @author Olshanikov Konstantin
  */
+@MessagePackMessage
 public class Message extends Packet {
 
     @Element
@@ -20,6 +22,7 @@ public class Message extends Packet {
 
     @Override
     public void process(IoSession session) {
-        session.write("adasdasd");
+        body = "sdadasdasdadasasdadasdasdadadadasdasdadasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasdadasdasd";
+        session.write(this);
     }
 }

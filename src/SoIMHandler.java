@@ -20,6 +20,7 @@ public class SoIMHandler extends IoHandlerAdapter {
     @Override
     public void messageReceived(IoSession session, Object message) throws Exception {
         String stanza = (String) message;
-
+        StanzaHandler handler = new StanzaHandler(session);
+        handler.handle(stanza, new Persister());
     }
 }
