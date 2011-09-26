@@ -5,6 +5,8 @@ import model.Packet;
 import org.apache.mina.core.session.IoSession;
 import org.simpleframework.xml.Serializer;
 
+import java.util.logging.Logger;
+
 /**
  * This code is brought you by
  *
@@ -18,15 +20,16 @@ public class StanzaHandler {
         this.session = session;
     }
 
-    public void handle(String stanza, Serializer parser) {
+    public void handle(String stanza) {
         Class<? extends Packet> clazz = null;
         if (stanza.startsWith("<message")) {
             clazz = Message.class;
         }
         try {
-            parser.read(clazz, stanza).process(session);
+            Message msg = (Message) XMLUtil.parse(stanza);
+            msg.process(session);
         } catch (Exception e) {
-            // TODO catch here
+            e.printStackTrace();
         }
     }
 }
