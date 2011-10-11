@@ -19,8 +19,9 @@ public class MongoHelper {
     private String host = "127.0.0.1";
     private int port = 27017;
 
-    private final String dbName = "soim";
-    private final String collName = "users";
+    private final String DATABASE_NAME = "soim";
+    private final String USERS_COLLECTION_NAME = "users";
+    private final String ONLINE_USERS_COLLECTION_NAME = "online_users";
 
     private final String USERNAME = "username";
     private final String PASSWORD = "password";
@@ -49,14 +50,20 @@ public class MongoHelper {
     }
 
     public void init() {
-        if (!mongo.getDatabaseNames().contains(dbName)) {
+        if (!mongo.getDatabaseNames().contains(DATABASE_NAME)) {
             logger.info("Database not exist. Creating...");
         }
-        DB db = mongo.getDB(dbName);
+        DB db = mongo.getDB(DATABASE_NAME);
 
-        if (!db.collectionExists(collName)) {
+        if (!db.collectionExists(USERS_COLLECTION_NAME)) {
             logger.info("Collection not exists. Creating...");
-            DBCollection coll = db.getCollection(collName);
+            DBCollection coll = db.getCollection(USERS_COLLECTION_NAME);
+            BasicDBObject idx = new BasicDBObject();
+            idx.append(USERNAME, 1);
+            coll.ensureIndex(idx, USERNAME_INDEX, true);
+        } if (!db.collectionExists(ONLINE_USERS_COLLECTION_NAME)) {
+            logger.info("Collection not exists. Creating...");
+            DBCollection coll = db.getCollection(ONLINE_USERS_COLLECTION_NAME);
             BasicDBObject idx = new BasicDBObject();
             idx.append(USERNAME, 1);
             coll.ensureIndex(idx, USERNAME_INDEX, true);
@@ -64,17 +71,17 @@ public class MongoHelper {
     }
 
     public boolean addNewUser(String login, String password) {
-        DBCollection coll = mongo.getDB(dbName).getCollection(collName);
+        DBCollection coll = mongo.getDB(DATABASE_NAME).getCollection(USERS_COLLECTION_NAME);
         BasicDBObject query = new BasicDBObject();
         query.append(USERNAME, login);
 
         BasicDBObject record = new BasicDBObject();
-        record.append(USERNAME, login).append(PASSWORD, password);
+        record.append(USERNAME, login).append(PASSWORD, MD5.hash((login + password + Config.APPLICATION_SECRET).getBytes()));
         return coll.insert(record).getError() == null;
     }
 
     public boolean addContact(String user, String contact) {
-        DBCollection coll = mongo.getDB(dbName).getCollection(collName);
+        DBCollection coll = mongo.getDB(DATABASE_NAME).getCollection(USERS_COLLECTION_NAME);
         BasicDBObject query = new BasicDBObject();
         query.append(USERNAME, user);
         DBObject record;
@@ -97,7 +104,7 @@ public class MongoHelper {
     }
 
     public List<String> getRoster(String user) {
-        DBCollection coll = mongo.getDB(dbName).getCollection(collName);
+        DBCollection coll = mongo.getDB(DATABASE_NAME).getCollection(USERS_COLLECTION_NAME);
         BasicDBObject query = new BasicDBObject();
         query.append(USERNAME, user);
         DBObject record;
@@ -112,7 +119,7 @@ public class MongoHelper {
     }
 
     public boolean deleteContact(String user, String contactName) {
-        DBCollection coll = mongo.getDB(dbName).getCollection(collName);
+        DBCollection coll = mongo.getDB(DATABASE_NAME).getCollection(USERS_COLLECTION_NAME);
         BasicDBObject query = new BasicDBObject();
         query.append(USERNAME, user);
         DBObject record;
@@ -126,6 +133,34 @@ public class MongoHelper {
                 return true;
             }
         }
+        return false;
+    }
+
+    public boolean goneOnline(String username) {
+        DBCollection coll = mongo.getDB(DATABASE_NAME).getCollection(ONLINE_USERS_COLLECTION_NAME);
+        BasicDBObject query = new BasicDBObject();
+        query.append(USERNAME, username);
+        return coll.insert(query).getError() == null;
+    }
+
+    public boolean goneOffline(String username) {
+        DBCollection coll = mongo.getDB(DATABASE_NAME).getCollection(ONLINE_USERS_COLLECTION_NAME);
+        BasicDBObject query = new BasicDBObject();
+        query.append(USERNAME, username);
+        return coll.remove(query).getError() == null;
+    }
+
+    public boolean auth(String login, String password) {
+        DBCollection coll = mongo.getDB(DATABASE_NAME).getCollection(USERS_COLLECTION_NAME);
+        BasicDBObject query = new BasicDBObject();
+        query.append(USERNAME, login);
+        DBObject record;
+        if ((record = coll.findOne(query)) == null) {
+            return false;
+        }
+        String hash = (String) record.get(PASSWORD);
+        if (hash.equals(MD5.hash((login + password + Config.APPLICATION_SECRET).getBytes())))
+            return true;
         return false;
     }
 }
