@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  */
 public class MongoHelper {
 
-    private static Logger logger = Logger.getLogger("mongo helper");
+    private static Logger logger = Logger.getLogger("soim.mongo.helper");
 
     private String host = "127.0.0.1";
     private int port = 27017;
@@ -136,14 +136,14 @@ public class MongoHelper {
         return false;
     }
 
-    public boolean goneOnline(String username) {
+    private boolean goneOnline(String username) {
         DBCollection coll = mongo.getDB(DATABASE_NAME).getCollection(ONLINE_USERS_COLLECTION_NAME);
         BasicDBObject query = new BasicDBObject();
         query.append(USERNAME, username);
         return coll.insert(query).getError() == null;
     }
 
-    public boolean goneOffline(String username) {
+    private boolean goneOffline(String username) {
         DBCollection coll = mongo.getDB(DATABASE_NAME).getCollection(ONLINE_USERS_COLLECTION_NAME);
         BasicDBObject query = new BasicDBObject();
         query.append(USERNAME, username);

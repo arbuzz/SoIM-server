@@ -1,8 +1,11 @@
-package model;
+package model.request;
 
+import model.AuthResponse;
+import model.request.Request;
 import org.apache.mina.core.session.IoSession;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
+import util.Config;
 import util.MongoHelper;
 import util.OnlineList;
 
@@ -12,7 +15,7 @@ import util.OnlineList;
  * @author Olshanikov Konstantin
  */
 @Root(name = "auth")
-public class Auth extends Packet {
+public class AuthRequest extends Request {
 
     @Attribute
     private String login;
@@ -20,16 +23,17 @@ public class Auth extends Packet {
     @Attribute
     private String password;
 
-    public Auth() {}
+    public AuthRequest() {}
 
     @Override
     public void process(IoSession session) {
         if (MongoHelper.getInstance().auth(login, password)) {
-            OnlineList.goneOnline(login);
-            session.write(new BaseResponse(BaseResponse.OK));
+            OnlineList.getInstance().goneOnline(login);
+            session.setAttribute(Config.LOGIN, login);
+            session.write(new AuthResponse(AuthResponse.OK));
         } else {
-            OnlineList.goneOffline(login);
-            session.write(new BaseResponse(BaseResponse.AUTH_ERROR));
+            OnlineList.getInstance().goneOffline(login);
+            session.write(new AuthResponse(AuthResponse.AUTH_ERROR));
         }
     }
 

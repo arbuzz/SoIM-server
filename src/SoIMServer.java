@@ -26,8 +26,6 @@ public class SoIMServer {
         helper.addContact("asd", "eeeqwedd");
         helper.addContact("asd", "rrr");
 
-        helper.goneOnline("asd");
-
         System.out.println(helper.auth("asd", "asdasd"));
         System.out.println(helper.auth("asd", "asd"));
 

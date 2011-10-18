@@ -1,11 +1,8 @@
 package util;
 
-import model.Message;
-import model.Packet;
+import model.request.Message;
+import model.request.Request;
 import org.apache.mina.core.session.IoSession;
-import org.simpleframework.xml.Serializer;
-
-import java.util.logging.Logger;
 
 /**
  * This code is brought you by
@@ -21,7 +18,7 @@ public class StanzaHandler {
     }
 
     public void handle(String stanza) {
-        Class<? extends Packet> clazz = null;
+        Class<? extends Request> clazz = null;
         if (stanza.startsWith("<message")) {
             clazz = Message.class;
         }

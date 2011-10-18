@@ -11,4 +11,6 @@ public class Config {
     public static final String SERIALIZER = "serializer";
 
     public static final String APPLICATION_SECRET = "j25Hh7(t&-09Tgg";
+
+    public static final String LOGIN = "login";
 }

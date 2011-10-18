@@ -1,9 +1,10 @@
-package model;
+package model.request;
 
+import model.request.Request;
 import org.apache.mina.core.session.IoSession;
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Text;
 
 /**
  * This code is brought you by
@@ -11,9 +12,9 @@ import org.simpleframework.xml.Root;
  * @author Olshanikov Konstantin
  */
 @Root(name = "message")
-public class Message extends Packet {
+public class Message extends Request {
 
-    @Element
+    @Text
     private String body;
     @Attribute
     private String to;

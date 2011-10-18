@@ -1,4 +1,4 @@
-package model;
+package model.request;
 
 import org.apache.mina.core.session.IoSession;
 
@@ -7,7 +7,7 @@ import org.apache.mina.core.session.IoSession;
  *
  * @author Olshanikov Konstantin
  */
-public abstract class Packet {
+public abstract class Request {
 
     public abstract void process(IoSession session);
 }

@@ -1,6 +1,9 @@
 package util;
 
-import model.Message;
+import model.request.AuthRequest;
+import model.request.Message;
+import model.request.Request;
+import model.request.RosterRequest;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
@@ -21,10 +24,14 @@ public class XMLUtil {
         return serializer;
     }
 
-    public static Object parse(String message) throws Exception {
-        Class clazz = null;
+    public static Request parse(String message) throws Exception {
+        Class<? extends Request> clazz = null;
         if (message.startsWith("<message"))
             clazz = Message.class;
+        else if (message.startsWith("<auth"))
+            clazz = AuthRequest.class;
+        else if (message.startsWith("<rosterRequest"))
+            clazz = RosterRequest.class;
         return getSerializer().read(clazz, message);
     }
 
