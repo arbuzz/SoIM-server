@@ -16,7 +16,6 @@ import java.net.InetSocketAddress;
 public class SoIMServer {
 
     public static void main(String[] args) throws Exception {
-//        MessagePack.register(String.class);
         IoAcceptor acceptor = new NioSocketAcceptor();
         MongoHelper helper = MongoHelper.getInstance();
         if (helper == null) {

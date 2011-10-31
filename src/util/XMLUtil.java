@@ -5,6 +5,8 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
 import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This code is brought you by
@@ -31,6 +33,8 @@ public class XMLUtil {
             clazz = RosterRequest.class;
         else if (message.startsWith("<register"))
             clazz = RegistrationRequest.class;
+        else if (message.startsWith("<find"))
+            clazz = FindRequest.class;
         return getSerializer().read(clazz, message);
     }
 

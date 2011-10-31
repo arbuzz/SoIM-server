@@ -2,10 +2,12 @@ package util;
 
 import com.mongodb.*;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  * This code is brought you by
@@ -171,5 +173,21 @@ public class MongoHelper {
         if (hash.equals(MD5.hash((login + password + Config.APPLICATION_SECRET).getBytes())))
             return true;
         return false;
+    }
+
+    public List<String> findUsers(String like) {
+        List<String> users = new ArrayList<String>();
+        BasicDBObject query = new BasicDBObject();
+        if (like != null) {
+            Pattern pattern = Pattern.compile(like);
+            query.append(USERNAME, pattern);
+        }
+        DBCollection coll = mongo.getDB(DATABASE_NAME).getCollection(USERS_COLLECTION_NAME);
+        DBCursor cursor = coll.find(query);
+        while (cursor.hasNext()) {
+            DBObject record = cursor.next();
+            users.add((String) record.get(USERNAME));
+        }
+        return users;
     }
 }
