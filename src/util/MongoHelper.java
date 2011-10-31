@@ -61,7 +61,8 @@ public class MongoHelper {
             BasicDBObject idx = new BasicDBObject();
             idx.append(USERNAME, 1);
             coll.ensureIndex(idx, USERNAME_INDEX, true);
-        } if (!db.collectionExists(ONLINE_USERS_COLLECTION_NAME)) {
+        }
+        if (!db.collectionExists(ONLINE_USERS_COLLECTION_NAME)) {
             logger.info("Collection not exists. Creating...");
             DBCollection coll = db.getCollection(ONLINE_USERS_COLLECTION_NAME);
             BasicDBObject idx = new BasicDBObject();
@@ -112,8 +113,10 @@ public class MongoHelper {
             return null;
         BasicDBList contacts = (BasicDBList) record.get(CONTACTS);
         List<String> roster = new ArrayList<String>();
-        for (Object contact : contacts) {
-            roster.add((String) ((DBObject) contact).get(CONTACT_NAME));
+        if (contacts != null) {
+            for (Object contact : contacts) {
+                roster.add((String) ((DBObject) contact).get(CONTACT_NAME));
+            }
         }
         return roster;
     }

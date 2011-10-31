@@ -1,9 +1,6 @@
 package util;
 
-import model.request.AuthRequest;
-import model.request.Message;
-import model.request.Request;
-import model.request.RosterRequest;
+import model.request.*;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
@@ -32,6 +29,8 @@ public class XMLUtil {
             clazz = AuthRequest.class;
         else if (message.startsWith("<rosterRequest"))
             clazz = RosterRequest.class;
+        else if (message.startsWith("<register"))
+            clazz = RegistrationRequest.class;
         return getSerializer().read(clazz, message);
     }
 

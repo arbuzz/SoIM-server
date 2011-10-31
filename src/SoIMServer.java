@@ -22,12 +22,12 @@ public class SoIMServer {
         if (helper == null) {
             return;
         }
-        helper.addNewUser("asd", "asd");
-        helper.addContact("asd", "eeeqwedd");
-        helper.addContact("asd", "rrr");
-
-        System.out.println(helper.auth("asd", "asdasd"));
-        System.out.println(helper.auth("asd", "asd"));
+//        helper.addNewUser("asd", "asd");
+//        helper.addContact("asd", "eeeqwedd");
+//        helper.addContact("asd", "rrr");
+//
+//        System.out.println(helper.auth("asd", "asdasd"));
+//        System.out.println(helper.auth("asd", "asd"));
 
 //        helper.deleteContact("asd", "eeeqwedd");
 

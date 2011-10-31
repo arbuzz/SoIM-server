@@ -9,5 +9,5 @@ import org.apache.mina.core.session.IoSession;
  */
 public abstract class Request {
 
-    public abstract void process(IoSession session);
+    public abstract boolean process(IoSession session);
 }

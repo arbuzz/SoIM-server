@@ -22,9 +22,10 @@ public class Message extends Request {
     private String from;
 
     @Override
-    public void process(IoSession session) {
+    public boolean process(IoSession session) {
         body = "Не " + body + ", а говно!";
         session.write(this);
+        return true;
     }
 
     public String getBody() {

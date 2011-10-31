@@ -35,12 +35,13 @@ public class RosterRequest extends Request {
     }
 
     @Override
-    public void process(IoSession session) {
+    public boolean process(IoSession session) {
         List<String> contacts = MongoHelper.getInstance().getRoster(login);
         Roster roster = new Roster();
         for (String contact : contacts) {
             roster.addContact(contact);
         }
         session.write(roster);
+        return true;
     }
 }
