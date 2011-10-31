@@ -83,11 +83,17 @@ public class MongoHelper {
 
     public boolean addContact(String user, String contact) {
         DBCollection coll = mongo.getDB(DATABASE_NAME).getCollection(USERS_COLLECTION_NAME);
-        BasicDBObject query = new BasicDBObject();
-        query.append(USERNAME, user);
+
+        BasicDBObject query = new BasicDBObject().append(USERNAME, contact);
         DBObject record;
         if ((record = coll.findOne(query)) == null)
             return false;
+
+        query = new BasicDBObject().append(USERNAME, user);
+        if ((record = coll.findOne(query)) == null)
+            return false;
+
+
 
         if (record.get(CONTACTS) == null) {
             BasicDBList contacts = new BasicDBList();
