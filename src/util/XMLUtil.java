@@ -35,6 +35,8 @@ public class XMLUtil {
             clazz = RegistrationRequest.class;
         else if (message.startsWith("<find"))
             clazz = FindRequest.class;
+        else if (message.startsWith("<addContact"))
+            clazz = AddContactRequest.class;
         return getSerializer().read(clazz, message);
     }
 
