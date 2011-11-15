@@ -1,5 +1,9 @@
 package util;
 
+import org.apache.mina.core.session.IoSession;
+import org.apache.mina.filter.util.SessionAttributeInitializingFilter;
+
+import javax.management.monitor.StringMonitor;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -15,14 +19,14 @@ public enum OnlineList {
 
     INSTANCE;
 
-    private Set<String> onlineContacts = new LinkedHashSet<String>();
+    private Map<String, IoSession> onlineContacts = new ConcurrentHashMap<String, IoSession>();
 
     public static OnlineList getInstance() {
         return INSTANCE;
     }
 
-    public void goneOnline(String user) {
-        onlineContacts.add(user);
+    public void goneOnline(String user, IoSession session) {
+        onlineContacts.put(user, session);
     }
 
     public void goneOffline(String user) {
@@ -30,7 +34,13 @@ public enum OnlineList {
     }
 
     public boolean isOnline(String user) {
-        return onlineContacts.contains(user);
+        return onlineContacts.keySet().contains(user);
+    }
+
+    public IoSession getSession(String user) {
+        if (onlineContacts.containsKey(user))
+            return onlineContacts.get(user);
+        return null;
     }
 
 }

@@ -5,6 +5,7 @@ import org.apache.mina.core.session.IoSession;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Text;
+import util.OnlineList;
 
 /**
  * This code is brought you by
@@ -23,8 +24,11 @@ public class Message extends Request {
 
     @Override
     public boolean process(IoSession session) {
-        body = "Не " + body + ", а говно!";
-        session.write(this);
+        IoSession userSession = OnlineList.getInstance().getSession(to);
+        if (userSession != null) {
+            userSession.write(this);
+        }
+//        session.write(this);
         return true;
     }
 
