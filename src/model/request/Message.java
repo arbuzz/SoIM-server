@@ -1,6 +1,5 @@
 package model.request;
 
-import model.request.Request;
 import org.apache.mina.core.session.IoSession;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -21,6 +20,8 @@ public class Message extends Request {
     private String to;
     @Attribute
     private String from;
+    @Attribute
+    private String date;
 
     @Override
     public boolean process(IoSession session) {
@@ -28,7 +29,6 @@ public class Message extends Request {
         if (userSession != null) {
             userSession.write(this);
         }
-//        session.write(this);
         return true;
     }
 
@@ -54,5 +54,13 @@ public class Message extends Request {
 
     public void setFrom(String from) {
         this.from = from;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
