@@ -1,5 +1,6 @@
 package util;
 
+import model.request.Presence;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.util.SessionAttributeInitializingFilter;
 
@@ -27,10 +28,14 @@ public enum OnlineList {
 
     public void goneOnline(String user, IoSession session) {
         onlineContacts.put(user, session);
+
+        writePresenceToContacts(new Presence(user, Presence.ONLINE));
     }
 
     public void goneOffline(String user) {
         onlineContacts.remove(user);
+
+        writePresenceToContacts(new Presence(user, Presence.OFFLINE));
     }
 
     public boolean isOnline(String user) {
@@ -41,6 +46,18 @@ public enum OnlineList {
         if (onlineContacts.containsKey(user))
             return onlineContacts.get(user);
         return null;
+    }
+
+    private void writePresenceToContacts(Presence presence) {
+        List<String> contacts = MongoHelper.getInstance().getRoster(presence.getName());
+        if (contacts != null) {
+            for (String contact : contacts) {
+                IoSession sessionToSend = onlineContacts.get(contact);
+                if (sessionToSend != null) {
+                    sessionToSend.write(presence);
+                }
+            }
+        }
     }
 
 }

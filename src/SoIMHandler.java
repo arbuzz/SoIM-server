@@ -34,6 +34,7 @@ public class SoIMHandler extends IoHandlerAdapter {
         if (login != null) {
             OnlineList.getInstance().goneOffline(login);
         }
+        logger.log(Level.SEVERE, login + " gone offline");
     }
 
     @Override
@@ -43,5 +44,6 @@ public class SoIMHandler extends IoHandlerAdapter {
             OnlineList.getInstance().goneOffline(login);
         }
         logger.log(Level.SEVERE, "exception in soim handler", cause);
+        logger.log(Level.SEVERE, login + " gone offline");
     }
 }

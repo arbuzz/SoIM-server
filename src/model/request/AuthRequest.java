@@ -27,9 +27,9 @@ public class AuthRequest extends Request {
     @Override
     public boolean process(IoSession session) {
         if (MongoHelper.getInstance().auth(login, password)) {
-            OnlineList.getInstance().goneOnline(login, session);
             session.setAttribute(Config.LOGIN, login);
             session.write(new BaseResponse(BaseResponse.OK));
+            OnlineList.getInstance().goneOnline(login, session);
             return true;
         } else {
             OnlineList.getInstance().goneOffline(login);
