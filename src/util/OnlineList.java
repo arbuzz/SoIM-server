@@ -21,6 +21,7 @@ public enum OnlineList {
     INSTANCE;
 
     private Map<String, IoSession> onlineContacts = new ConcurrentHashMap<String, IoSession>();
+    private Map<String, String> statuses = new ConcurrentHashMap<String, String>();
 
     public static OnlineList getInstance() {
         return INSTANCE;
@@ -34,6 +35,7 @@ public enum OnlineList {
 
     public void goneOffline(String user) {
         onlineContacts.remove(user);
+        statuses.remove(user);
 
         writePresenceToContacts(new Presence(user, Presence.OFFLINE));
     }
@@ -58,6 +60,16 @@ public enum OnlineList {
                 }
             }
         }
+    }
+
+    public String getStatus(String user) {
+        return statuses.get(user);
+    }
+
+    public void setStatus(String user, String status) {
+        statuses.put(user, status);
+
+        writePresenceToContacts(new Presence(user, status));
     }
 
 }

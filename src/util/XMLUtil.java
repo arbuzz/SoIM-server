@@ -39,6 +39,8 @@ public class XMLUtil {
             clazz = AddContactRequest.class;
         else if (message.startsWith("<deleteContact"))
             clazz = DeleteContactRequest.class;
+        else if (message.startsWith("<setStatus"))
+            clazz = SetStatusRequest.class;
         return getSerializer().read(clazz, message);
     }
 

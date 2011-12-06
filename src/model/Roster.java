@@ -29,6 +29,8 @@ public class Roster {
     }
 
     public void addContact(String user) {
-        contacts.add(new RosterElement(user, OnlineList.getInstance().isOnline(user)));
+        contacts.add(new RosterElement(user,
+                OnlineList.getInstance().isOnline(user),
+                OnlineList.getInstance().getStatus(user)));
     }
 }

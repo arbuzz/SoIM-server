@@ -16,12 +16,15 @@ public class RosterElement {
     private String name;
     @Attribute
     private boolean online;
+    @Attribute(required = false)
+    private String textStatus;
 
     public RosterElement() {}
 
-    public RosterElement(String name, boolean online) {
+    public RosterElement(String name, boolean online, String textStatus) {
         this.name = name;
         this.online = online;
+        this.textStatus = textStatus;
     }
 
     public String getName() {
@@ -38,5 +41,13 @@ public class RosterElement {
 
     public void setOnline(boolean online) {
         this.online = online;
+    }
+
+    public String getTextStatus() {
+        return textStatus;
+    }
+
+    public void setTextStatus(String textStatus) {
+        this.textStatus = textStatus;
     }
 }
